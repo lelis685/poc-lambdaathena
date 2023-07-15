@@ -9,6 +9,8 @@ import example.integration.SsmIntegration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 
 public class Handler implements RequestHandler<ScheduledEvent, Void> {
     private static final Logger logger = LoggerFactory.getLogger(Handler.class);
@@ -22,8 +24,6 @@ public class Handler implements RequestHandler<ScheduledEvent, Void> {
         logger.info("start lambda");
 
         initIntegrations();
-
-        logger.info("calling athena query executor");
 
         try {
             queryExecutor.execute().ifPresentOrElse(

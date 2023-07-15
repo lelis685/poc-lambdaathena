@@ -15,8 +15,10 @@ import static org.awaitility.Awaitility.await;
 public class AthenaQueryExecutor {
     private static final Logger logger = LoggerFactory.getLogger(AthenaQueryExecutor.class);
 
-    private static final String ATHENA_OUTPUT_S3_FOLDER_PATH = "s3://lelis-result-athena/result-lambda";
-    private static final String ATHENA_DATABASE = "water_data_database";
+    private static final String ATHENA_OUTPUT_S3_FOLDER_PATH = System.getenv("ATHENA_OUTPUT_S3_FOLDER_PATH");
+    private static final String ATHENA_DATABASE = System.getenv("ATHENA_DATABASE");
+    private static final long TIMEOUT_EXECUTION_SECONDS = Long.parseLong(System.getenv("TIMEOUT_EXECUTION_SECONDS"));
+    private static final long POLL_DELAY_SECONDS = 2;
 
     private static final String QUERY =
             """
@@ -35,15 +37,15 @@ public class AthenaQueryExecutor {
 
             final var executionRequest = buildExecutionRequest();
 
-            logger.info("start request");
+            logger.info("start request query athena execution");
 
             final var executionId = athena.startQueryExecution(executionRequest).queryExecutionId();
 
             logger.info("query executionId=" + executionId);
 
             await()
-                    .atMost(30, SECONDS)
-                    .pollInterval(2, SECONDS)
+                    .atMost(TIMEOUT_EXECUTION_SECONDS, SECONDS)
+                    .pollInterval(POLL_DELAY_SECONDS, SECONDS)
                     .until(() -> tryExtractExecutionStateSucceed(executionId));
 
             logger.info("athena execution query succeeded");
@@ -90,7 +92,6 @@ public class AthenaQueryExecutor {
         final var state = executionResponse.queryExecution()
                 .status()
                 .state().name();
-        logger.info("checking state " + state);
         return state.equals(QueryExecutionState.SUCCEEDED.name());
     }
 
