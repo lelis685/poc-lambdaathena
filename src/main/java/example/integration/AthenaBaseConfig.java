@@ -3,7 +3,13 @@ package example.integration;
 
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
-import software.amazon.awssdk.services.athena.model.*;
+import software.amazon.awssdk.services.athena.model.GetQueryExecutionRequest;
+import software.amazon.awssdk.services.athena.model.QueryExecutionContext;
+import software.amazon.awssdk.services.athena.model.QueryExecutionState;
+import software.amazon.awssdk.services.athena.model.ResultConfiguration;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class AthenaBaseConfig {
 
@@ -18,13 +24,23 @@ public abstract class AthenaBaseConfig {
         this.athena = buildAthenaClient();
     }
 
-    protected QueryExecutionContext buildQueryExecutionContext(){
+    protected String createQueryWithConditions(int limit, String... keys) {
+        var whereClause = new ArrayList<String>();
+        var queryBuilder = new StringBuilder("SELECT reservoir_name,subbasin,agency_name,dt FROM water wt");
+        var limitClause = " LIMIT " + limit;
+        Arrays.stream(keys).forEach(key -> whereClause.add(String.format("wt.%s = ?", key)));
+        return keys.length < 1 ? queryBuilder + limitClause :
+                queryBuilder.append(" WHERE " + String.join(" AND ", whereClause)) + limitClause;
+    }
+
+
+    protected QueryExecutionContext buildQueryExecutionContext() {
         return QueryExecutionContext.builder()
                 .database(ATHENA_DATABASE)
                 .build();
     }
 
-    protected ResultConfiguration buildResultConfiguration(){
+    protected ResultConfiguration buildResultConfiguration() {
         return ResultConfiguration.builder()
                 .outputLocation(ATHENA_OUTPUT_S3_FOLDER_PATH)
                 .build();

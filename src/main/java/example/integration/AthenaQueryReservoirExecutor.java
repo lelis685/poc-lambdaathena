@@ -45,12 +45,7 @@ public class AthenaQueryReservoirExecutor extends AthenaBaseConfig {
 
 
     private StartQueryExecutionRequest buildExecutionRequest(String reservoirName) {
-        final var query = """
-                  SELECT reservoir_name,subbasin,agency_name,dt
-                  FROM water
-                  WHERE reservoir_name = ?
-                  LIMIT 3;
-                """;
+        String query = createQueryWithConditions(3, "reservoir_name");
         return StartQueryExecutionRequest.builder()
                 .queryString(query)
                 .executionParameters( "\"" + reservoirName + "\"")
