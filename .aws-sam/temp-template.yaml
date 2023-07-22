@@ -1,0 +1,17 @@
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 80
+      MemorySize: 832
+      Handler: example.Handler
+      CodeUri: C:\repo\pocjava-select-athena
+      Runtime: java17
+      Architectures:
+        - x86_64
+      Environment:
+        Variables:
+          ATHENA_DATABASE: water_data_database
+          ATHENA_OUTPUT_S3_FOLDER_PATH: s3://lelis-result-athena/result-lambda 
+          PARAMETER_STORE_NAME: /TESTE/BATATA 
+          TIMEOUT_EXECUTION_SECONDS: 60
