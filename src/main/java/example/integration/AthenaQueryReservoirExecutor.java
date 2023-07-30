@@ -1,6 +1,7 @@
 package example.integration;
 
 
+import example.integration.config.AthenaBaseConfig;
 import example.integration.dto.ReservoirDetailsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class AthenaQueryReservoirExecutor extends AthenaBaseConfig {
         String query = createQueryWithConditions(3, "reservoir_name");
         return StartQueryExecutionRequest.builder()
                 .queryString(query)
-                .executionParameters( "\"" + reservoirName + "\"")
+                .executionParameters(stringify(reservoirName))
                 .queryExecutionContext(buildQueryExecutionContext())
                 .resultConfiguration(buildResultConfiguration())
                 .build();
@@ -74,6 +75,10 @@ public class AthenaQueryReservoirExecutor extends AthenaBaseConfig {
                 });
 
         return result;
+    }
+
+    private String stringify(String value) {
+        return "\"" + value + "\"";
     }
 
 }

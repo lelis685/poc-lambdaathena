@@ -5,7 +5,7 @@ Resources:
       Timeout: 80
       MemorySize: 832
       Handler: example.Handler
-      CodeUri: C:\repo\pocjava-select-athena
+      CodeUri: ${SOURCE_URI}
       Runtime: java17
       Architectures:
         - x86_64

@@ -1,6 +1,7 @@
 package example.integration;
 
 
+import example.integration.config.AthenaBaseConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.athena.model.Datum;

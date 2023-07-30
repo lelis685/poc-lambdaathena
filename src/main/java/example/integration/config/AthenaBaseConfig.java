@@ -1,4 +1,4 @@
-package example.integration;
+package example.integration.config;
 
 
 import software.amazon.awssdk.regions.Region;
