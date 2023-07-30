@@ -1,9 +1,10 @@
 # poc-lambdaathena
 
-Poc Lambda java maven, integracao Athena e SSM.
+Lambda java maven, integration Athena and SSM.
 
 IAM permissoes necessarias:
 ssm:PutParameter
 AmazonAthenaFullAccess
 AWSLambdaBasicExecutionRole
 
+![My animated logo](doc/arc.png)
