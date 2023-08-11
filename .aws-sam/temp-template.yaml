@@ -3,9 +3,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Timeout: 80
-      MemorySize: 832
+      MemorySize: 576
       Handler: example.Handler
-      CodeUri: ${SOURCE_URI}
+      CodeUri: C:\repo\pocjava-select-athena
       Runtime: java17
       Architectures:
         - x86_64
