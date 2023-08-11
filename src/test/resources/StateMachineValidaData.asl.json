@@ -1,0 +1,50 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Resultado Query",
+  "States": {
+    "Resultado Query": {
+      "Type": "Pass",
+      "Next": "Checa Data",
+      "Result": {
+        "date": "2023081"
+      }
+    },
+    "Checa Data": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-east-1:607621156411:function:athena-lambda:$LATEST",
+      "Parameters": {
+        "date.$": "$.date"
+      },
+      "Next": "Data é Hoje ?",
+      "ResultSelector": {
+        "ehDataHoje.$": "$"
+      }
+    },
+    "Data é Hoje ?": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.ehDataHoje",
+          "StringMatches": "true",
+          "Comment": "Sim",
+          "Next": "Sucesso"
+        },
+        {
+          "Variable": "$.ehDataHoje",
+          "StringMatches": "false",
+          "Next": "Aguarde e tente novamente",
+          "Comment": "Nao"
+        }
+      ]
+    },
+    "Sucesso": {
+      "Type": "Succeed"
+    },
+    "Aguarde e tente novamente": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "Resultado Query"
+    }
+  },
+  "TimeoutSeconds": 30
+}

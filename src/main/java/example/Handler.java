@@ -23,7 +23,9 @@ public class Handler implements RequestHandler<Map<String,String>, String> {
         try {
             LocalDate dateEvent = LocalDate.parse(event.get("date"), DateTimeFormatter.ofPattern(DATE_PATTERN));
             LocalDate currentDate = LocalDate.now();
-            return String.valueOf(currentDate.isEqual(dateEvent));
+            String isValid = String.valueOf(currentDate.isEqual(dateEvent));
+            logger.info("isValid {}", isValid);
+            return isValid;
         } catch (Exception e) {
             throw new RuntimeException("lambda execution failed", e);
         }
